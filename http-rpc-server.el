@@ -35,6 +35,21 @@ arguments to evaluate the result."
 `web-server' doesn't add content to the response unless it's of a
 specific type. This is a hack to extract it manually."
   ;; TODO: Ensure request is a POST
+  (error
+   ;; This method is a hack to compensate for `emacs-web-server's inability to
+   ;; handle POST content. Unfortunately, it DOES NOT WORK RELIABLY.
+   ;;
+   ;; Sometimes it works fine, but sometimes no content exists in \"pending\".
+   ;; Sometimes, it simply throws an internal error. Either way, it is not
+   ;; reliable and therefore cannot be used in deployment.
+   ;;
+   ;; Raise an error to explicitly block content extraction, until it is
+   ;; implemented in `emacs-web-server' or a reliable workaround can be
+   ;; developed.
+   (concat
+    "This hack to manually extract `ws-request' POST content doesn't work "
+    "reliably. See the comments in `hrpc--extract-post-content' for more "
+    "information."))
 
   ;; This method relies on pending having the full request content.
   (with-slots (pending) request
